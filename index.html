@@ -1,75 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ポートフォリオ</title>
-  <!-- Tailwind CSSを読み込み -->
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-6 md:p-12">
-  <div class="max-w-3xl mx-auto space-y-12">
-    
-    <!-- ヘッダー・自己紹介 -->
-    <header class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-      <h1 class="text-3xl font-bold text-slate-900 mb-2">ポートフォリオ</h1>
-      <p class="text-indigo-600 font-medium mb-4">Web Engineer / Full-Stack Student</p>
-      <p class="text-slate-600 leading-relaxed">
-        要件定義から実装・Web分析まで対応できるフルスタック志向の学生エンジニア[cite: 1]。
-        実務経験2年で培った課題解決力を活かし、動的なWebアプリケーションやゲームの開発に取り組んでいます[cite: 1]！
-      </p>
-      <div class="mt-6 flex gap-4 text-sm font-medium">
-        <a href="https://github.com/your-username" target="_blank" class="text-slate-500 hover:text-indigo-600">GitHub</a>
-        <a href="https://x.com/" target="_blank" class="text-slate-500 hover:text-indigo-600">X (Twitter)</a>
-        <a href="https://coconala.com/" target="_blank" class="text-slate-500 hover:text-indigo-600">ココナラ</a>
-      </div>
-    </header>
-
-    <!-- 成果物セクション -->
-    <section class="space-y-4">
-      <h2 class="text-xl font-bold text-slate-900">Projects / 成果物</h2>
-      <div class="grid gap-4 md:grid-cols-2">
-        
-        <!-- 成果物1：ライフログ -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-full">Web App</span>
-            <h3 class="text-lg font-bold mt-2">ライフログ (日記アプリ)</h3>
-            <p class="text-slate-600 text-sm mt-1">個人チームで開発中の多機能日記アプリ。設計から試行錯誤して実装中[cite: 1]。</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between text-xs text-slate-500">
-            <span>Laravel / Python</span>
-            <span class="text-indigo-600 font-medium">公開準備中</span>
-          </div>
-        </div>
-
-        <!-- 成果物2：ミニゲーム -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full">React Game</span>
-            <h3 class="text-lg font-bold mt-2">インタラクティブ・Webゲーム</h3>
-            <p class="text-slate-600 text-sm mt-1">Reactの状態管理（State）を活かしたブラウザ上で遊べるリアルタイムミニゲーム。</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between text-xs text-slate-500">
-            <span>React / Tailwind</span>
-            <span class="text-emerald-600 font-medium">Coming Soon</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 実務経験 -->
-    <section class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-      <h2 class="text-xl font-bold text-slate-900">Work Experience</h2>
-      <div class="border-l-2 border-indigo-500 pl-4 space-y-2">
-        <h3 class="font-bold text-slate-800">IT企業 Web開発エンジニア（学生アルバイト・2年間）[cite: 1]</h3>
-        <p class="text-sm text-slate-600">
-          出社状況管理システム開発（要件定義〜実装）、GA4/Search Consoleを活用したWeb分析およびWebサイトの大規模改修プロジェクトを担当[cite: 1]。
-        </p>
-      </div>
-    </section>
-
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
