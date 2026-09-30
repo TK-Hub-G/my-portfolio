@@ -3,14 +3,14 @@
 export const projects = [
   {
     id: 'lifelog',
-    title: 'ライフログ（日記アプリ）',
+    title: 'ライフログ（日記共有アプリ）',
     category: 'Web App',
     color: 'indigo',
     tags: ['Laravel', 'Python'],
-    status: '公開準備中',
+    status: '公開中',
     featured: true,
     summary:
-      '個人チームで開発中の多機能日記アプリ。実用性を追求し、設計から実装まで思考プロセスを重ねて進行中。',
+      '個人チームで開発・公開している多機能日記アプリ。実用性を追求し、設計から実装・リリースまで一貫して担当。',
     description: [
       '要件定義から画面設計、DB設計、実装までを個人チームで担当している日記アプリです。',
       '「書く手間を減らして続けられること」をコンセプトに、入力補助やタグ付け、振り返り機能などの検討を重ねています。',
@@ -19,7 +19,7 @@ export const projects = [
     stack: ['Laravel', 'Python', 'MySQL', 'Docker'],
     links: {
       github: null,
-      demo: null,
+      demo: 'https://lifelog-a56a.onrender.com/',
     },
   },
   {

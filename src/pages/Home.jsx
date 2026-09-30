@@ -1,92 +1,85 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Terminal, Code, ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { projects } from '../data/projects';
-import ProjectCard from '../components/ProjectCard';
+import { site } from '../data/site';
+import ProjectRow from '../components/ProjectRow';
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+const fade = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 export default function Home() {
   const featured = projects.filter((p) => p.featured);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-10 pb-20 space-y-16">
-      <motion.header
+    <div className="mx-auto w-full max-w-6xl px-6 sm:px-10">
+      {/* ヒーロー */}
+      <motion.section
         initial="hidden"
         animate="visible"
-        variants={fadeIn}
-        className="p-8 rounded-3xl bg-slate-900/50 border border-slate-800 backdrop-blur-xl relative overflow-hidden shadow-2xl"
+        variants={fade}
+        className="pt-16 sm:pt-24 pb-14 sm:pb-20"
       >
-        <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-          <Terminal size={160} />
-        </div>
-
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">
-          <Sparkles size={14} /> Full-Stack Student Engineer
-        </div>
-
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent mb-4">
-          Portfolio
-        </h1>
-
-        <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mb-8">
-          要件定義などの上流工程から実装、アクセス分析まで一貫して対応可能。
-          実務2年で培った現場感と、常に新しい技術へ挑む姿勢を強みとしています。
+        <p className="text-xs font-semibold tracking-[0.18em] text-ink-2">
+          {site.role.toUpperCase()}
         </p>
-
-        <div className="flex flex-wrap gap-4 text-sm font-medium">
+        <h1 className="mt-6 font-jp text-5xl sm:text-7xl font-extrabold tracking-tight leading-[1.12]">
+          {site.heroHeadline.map((line, i) => (
+            <span key={i} className="block">
+              {line}
+            </span>
+          ))}
+        </h1>
+        <div className="mt-9 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+          <p className="max-w-xl font-jp text-base sm:text-lg leading-relaxed text-ink-2">
+            {site.heroIntro}
+          </p>
           <Link
-            to="/about"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-bold transition-all hover:scale-105"
+            to="/projects"
+            className="group inline-flex items-center gap-2 font-semibold text-accent shrink-0"
           >
-            経歴・スキルを見る <ArrowRight size={16} />
+            作品を見る
+            <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
           </Link>
-          <a
-            href="https://github.com/your-username"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105"
-          >
-            <Globe size={18} /> GitHub
-          </a>
-          <a
-            href="https://x.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all hover:scale-105"
-          >
-            <Globe size={18} /> X (Twitter)
-          </a>
         </div>
-      </motion.header>
+      </motion.section>
 
+      {/* 実績サマリー */}
+      <section className="border-t border-line py-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-4">
+          {site.stats.map((s) => (
+            <div key={s.label} className="flex items-baseline gap-2">
+              <span className="text-xl font-bold tracking-tight">{s.value}</span>
+              <span className="font-jp text-sm text-ink-2">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Selected Work */}
       <motion.section
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeIn}
-        className="space-y-6"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={fade}
+        className="pt-16 pb-4"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Code className="text-indigo-400" />
-            <h2 className="text-2xl font-bold">Featured Projects</h2>
-          </div>
+        <div className="flex items-end justify-between pb-1">
+          <h2 className="text-sm font-semibold">Selected Work</h2>
           <Link
             to="/projects"
-            className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium"
+            className="text-sm font-medium text-ink-2 hover:text-ink transition-colors"
           >
-            すべて見る <ArrowRight size={14} />
+            All projects →
           </Link>
         </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {featured.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+        <div>
+          {featured.map((p) => (
+            <ProjectRow key={p.id} project={p} />
           ))}
+          <div className="border-t border-line" />
         </div>
       </motion.section>
     </div>

@@ -1,0 +1,32 @@
+/* Google Fonts（見出し・UI = Geist / 和文 = Noto Sans JP）。@import は最上部に置く必要があります */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;800&display=swap');
+@import "tailwindcss";
+
+/* サイト共通のデザイントークン。色・フォントはここで一元管理 */
+@theme {
+  --color-paper: #ffffff;
+  --color-ink: #0a0a0a;
+  --color-ink-2: #6b6b6b;
+  --color-muted: #b2b2b2;
+  --color-line: #ececec;
+  --color-accent: #ff3d00;
+  --font-sans: "Geist", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+  --font-jp: "Noto Sans JP", "Geist", ui-sans-serif, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #ffffff;
+}

@@ -1,17 +1,57 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send, Globe, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { site } from '../data/site';
 
-const CONTACT_EMAIL = 'your-email@example.com';
-
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+const fade = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
+function Section({ label, children }) {
+  return (
+    <div className="grid gap-6 border-t border-line py-10 sm:grid-cols-[180px_1fr] sm:gap-16 sm:py-12">
+      <h2 className="text-sm font-semibold tracking-wide">{label}</h2>
+      <div>{children}</div>
+    </div>
+  );
+}
+
+function Field({ label, name, value, onChange, placeholder, textarea }) {
+  const cls =
+    'w-full bg-transparent border-b border-ink-2 py-3 text-ink placeholder:text-muted focus:outline-none focus:border-accent transition-colors';
+  return (
+    <div className="space-y-2">
+      <label htmlFor={name} className="block text-sm font-semibold">
+        {label}
+      </label>
+      {textarea ? (
+        <textarea
+          id={name}
+          name={name}
+          rows={4}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={`${cls} resize-none`}
+        />
+      ) : (
+        <input
+          id={name}
+          name={name}
+          type="text"
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={cls}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', message: '' });
-  const [copied, setCopied] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,112 +59,92 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`ポートフォリオを見ました - ${form.name || '名前未入力'}`);
-    const body = encodeURIComponent(form.message);
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    const subject = encodeURIComponent(
+      form.subject || `ポートフォリオを見ました - ${form.name || '名前未入力'}`,
+    );
+    const body = encodeURIComponent(
+      `${form.message}\n\n---\nお名前: ${form.name}\nメール: ${form.email}`,
+    );
+    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
   };
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(CONTACT_EMAIL);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // クリップボードAPIが使えない環境ではメールリンクから直接送ってもらう
-    }
-  };
+  const channels = [
+    { label: 'EMAIL', value: site.email, href: `mailto:${site.email}` },
+    { label: 'GITHUB', value: site.socials.github.replace(/^https?:\/\//, ''), href: site.socials.github },
+    { label: 'X (TWITTER)', value: site.socials.x.replace(/^https?:\/\//, ''), href: site.socials.x },
+  ];
 
   return (
-    <div className="max-w-2xl mx-auto px-6 pt-10 pb-20 space-y-8">
-      <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Mail className="text-indigo-400" />
-          <h1 className="text-3xl font-bold">Contact</h1>
-        </div>
-        <p className="text-slate-400 text-sm">
-          お問い合わせは下記フォーム（メールアプリが開きます）または各SNSからお気軽にどうぞ。
-        </p>
-      </motion.div>
-
-      <motion.form
+    <div className="mx-auto w-full max-w-6xl px-6 sm:px-10">
+      <motion.header
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeIn}
-        onSubmit={handleSubmit}
-        className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4"
+        animate="visible"
+        variants={fade}
+        className="pt-16 sm:pt-24 pb-10"
       >
-        <div className="space-y-1.5">
-          <label htmlFor="name" className="text-xs font-medium text-slate-400">
-            お名前
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-sm focus:outline-none focus:border-indigo-500"
-            placeholder="山田 太郎"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label htmlFor="message" className="text-xs font-medium text-slate-400">
-            メッセージ
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={5}
-            value={form.message}
-            onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-sm focus:outline-none focus:border-indigo-500 resize-none"
-            placeholder="お仕事のご相談やフィードバックなど"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-bold transition-all"
-        >
-          <Send size={16} /> メールアプリで送信
-        </button>
-        <p className="text-[11px] text-slate-500 leading-relaxed">
-          ※ このフォームはサーバーを持たないため、送信ボタンを押すとお使いのメールソフトが開きます。
+        <p className="text-xs font-semibold tracking-[0.18em] text-ink-2">CONTACT</p>
+        <h1 className="mt-5 text-5xl sm:text-6xl font-bold tracking-tight">Contact</h1>
+        <p className="mt-5 max-w-xl font-jp leading-relaxed text-ink-2">
+          お仕事のご相談・ご質問などお気軽にどうぞ。フォーム、または各SNS・メールからご連絡いただけます。
         </p>
-      </motion.form>
+      </motion.header>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeIn}
-        className="flex flex-wrap items-center gap-3 text-sm font-medium"
-      >
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
-        >
-          {copied ? <Check size={16} className="text-emerald-400" /> : <Mail size={16} />}
-          {copied ? 'コピーしました' : CONTACT_EMAIL}
-        </button>
-        <a
-          href="https://github.com/your-username"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
-        >
-          <Globe size={18} /> GitHub
-        </a>
-        <a
-          href="https://x.com/"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all"
-        >
-          <Globe size={18} /> X (Twitter)
-        </a>
-      </motion.div>
+      <div>
+        <Section label="MESSAGE">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Field label="お名前" name="name" value={form.name} onChange={handleChange} placeholder="山田 太郎" />
+              <Field
+                label="メールアドレス"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+              />
+            </div>
+            <Field label="件名" name="subject" value={form.subject} onChange={handleChange} placeholder="ご相談の件名" />
+            <Field
+              label="メッセージ"
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              placeholder="ご相談内容をご記入ください。"
+              textarea
+            />
+            <button
+              type="submit"
+              className="group inline-flex items-center gap-2 bg-ink px-8 py-3.5 text-sm font-semibold text-paper transition-opacity hover:opacity-85"
+            >
+              送信する
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </button>
+            <p className="text-xs leading-relaxed text-muted">
+              ※ サーバーを持たないため、送信ボタンでお使いのメールソフトが開きます。
+            </p>
+          </form>
+        </Section>
+
+        <Section label="CHANNELS">
+          <div className="space-y-6">
+            {channels.map((c) => (
+              <a
+                key={c.label}
+                href={c.href}
+                target={c.href.startsWith('http') ? '_blank' : undefined}
+                rel={c.href.startsWith('http') ? 'noreferrer' : undefined}
+                className="group block"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">{c.label}</p>
+                <p className="mt-1 text-lg font-medium transition-colors group-hover:text-accent">
+                  {c.value}
+                </p>
+              </a>
+            ))}
+          </div>
+        </Section>
+
+        <div className="border-t border-line" />
+      </div>
     </div>
   );
 }

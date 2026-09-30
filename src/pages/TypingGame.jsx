@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Play, RotateCcw, Sparkles, Trophy, Zap } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Trophy, Zap } from 'lucide-react';
 import { DIFFICULTIES, HIGH_SCORE_KEY_PREFIX } from '../data/typingWords';
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+const fade = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 function readHighScore(difficulty) {
@@ -97,80 +97,72 @@ export default function TypingGame() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-6 pt-10 pb-20 space-y-8">
+    <div className="mx-auto w-full max-w-3xl px-6 sm:px-10 pt-14 sm:pt-20 pb-4">
       <Link
         to="/projects"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink transition-colors"
       >
-        <ArrowLeft size={16} /> Projects に戻る
+        <ArrowLeft size={16} /> Projects
       </Link>
 
-      <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Sparkles className="text-emerald-400" />
-          <h1 className="text-3xl font-bold">Dev Typing Game</h1>
-        </div>
-        <p className="text-slate-400 text-sm leading-relaxed">
+      <motion.header initial="hidden" animate="visible" variants={fade} className="mt-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">React Game · Playable</p>
+        <h1 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight">Dev Typing Game</h1>
+        <p className="mt-5 max-w-xl font-jp leading-relaxed text-ink-2">
           Reactの状態管理とタイマー制御を活かしたミニタイピングゲーム。難易度ごとにハイスコアがブラウザに保存されます。
         </p>
-      </motion.div>
+      </motion.header>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeIn}
-        className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-6"
-      >
+      <div className="mt-10 border-t border-line pt-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {Object.entries(DIFFICULTIES).map(([key, d]) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => changeDifficulty(key)}
                 disabled={isPlaying}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                   difficulty === key
-                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
-                    : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200'
+                    ? 'bg-ink text-paper'
+                    : 'text-ink-2 hover:text-ink'
                 }`}
               >
                 {d.label}
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <Trophy size={14} className="text-amber-400" />
-            Best: <strong className="text-amber-400">{highScore}</strong>
+          <div className="flex items-center gap-1.5 text-sm text-ink-2">
+            <Trophy size={15} className="text-accent" />
+            Best: <strong className="text-ink">{highScore}</strong>
           </div>
         </div>
 
-        <div className="bg-slate-950 p-8 rounded-xl border border-slate-800 text-center relative overflow-hidden min-h-[220px] flex items-center justify-center">
+        <div className="mt-6 flex min-h-[240px] items-center justify-center border border-line p-8 text-center">
           {!isPlaying && !isGameOver && (
             <button
               onClick={startGame}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all text-lg"
+              className="group inline-flex items-center gap-2 bg-accent px-7 py-3.5 text-base font-semibold text-white transition-opacity hover:opacity-85"
             >
               <Play size={18} /> ゲームスタート
             </button>
           )}
 
           {isPlaying && (
-            <div className="w-full space-y-4">
-              <div className="flex justify-between text-xs text-slate-400">
+            <div className="w-full space-y-6">
+              <div className="flex justify-between text-sm text-ink-2">
                 <span>
-                  Time: <strong className="text-emerald-400">{timeLeft}s</strong>
+                  Time: <strong className="text-ink">{timeLeft}s</strong>
                 </span>
                 <span className="flex items-center gap-1">
-                  <Zap size={14} className="text-amber-400" /> Combo:{' '}
-                  <strong className="text-amber-400">{combo}</strong>
+                  <Zap size={14} className="text-accent" /> Combo:{' '}
+                  <strong className="text-ink">{combo}</strong>
                 </span>
                 <span>
-                  Score: <strong className="text-emerald-400">{score}</strong>
+                  Score: <strong className="text-ink">{score}</strong>
                 </span>
               </div>
-              <div className="text-3xl font-mono font-bold tracking-wider text-indigo-300">
+              <div className="font-mono text-4xl font-bold tracking-wider text-ink">
                 {currentWord}
               </div>
               <input
@@ -181,27 +173,27 @@ export default function TypingGame() {
                 placeholder="ここに入力..."
                 autoComplete="off"
                 spellCheck={false}
-                className="w-full px-3 py-2 rounded bg-slate-900 border border-slate-700 text-center focus:outline-none focus:border-emerald-400 font-mono text-base"
+                className="w-full border-b border-ink-2 bg-transparent py-2 text-center font-mono text-lg placeholder:text-muted focus:border-accent focus:outline-none"
               />
             </div>
           )}
 
           {isGameOver && (
-            <div className="space-y-3">
-              <div className="text-lg font-bold text-slate-200">
-                タイムアップ！ {isNewRecord && <span className="text-amber-400">New Best!</span>}
+            <div className="space-y-4">
+              <div className="text-xl font-bold">
+                タイムアップ！ {isNewRecord && <span className="text-accent">New Best!</span>}
               </div>
-              <div className="flex justify-center gap-6 text-sm text-slate-400">
+              <div className="flex justify-center gap-8 text-sm text-ink-2">
                 <span>
-                  Score: <strong className="text-emerald-400 text-lg">{score}</strong>
+                  Score: <strong className="text-ink text-lg">{score}</strong>
                 </span>
                 <span>
-                  Best Combo: <strong className="text-amber-400 text-lg">{bestCombo}</strong>
+                  Best Combo: <strong className="text-ink text-lg">{bestCombo}</strong>
                 </span>
               </div>
               <button
                 onClick={startGame}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium transition-all"
+                className="inline-flex items-center gap-1.5 border border-line px-4 py-2 text-sm font-medium hover:border-ink-2 transition-colors"
               >
                 <RotateCcw size={14} /> もう一度遊ぶ
               </button>
@@ -209,11 +201,11 @@ export default function TypingGame() {
           )}
         </div>
 
-        <div className="pt-4 border-t border-slate-800/80 flex justify-between text-xs text-slate-500">
-          <span>React / Hooks / localStorage</span>
-          <span className="text-emerald-400 font-medium">Playable</span>
+        <div className="mt-6 flex justify-between border-t border-line pt-4 text-xs text-muted">
+          <span>React · Hooks · localStorage</span>
+          <span className="font-medium text-ink-2">Playable</span>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

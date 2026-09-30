@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code } from 'lucide-react';
 import { projects } from '../data/projects';
-import ProjectCard from '../components/ProjectCard';
+import ProjectRow from '../components/ProjectRow';
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+const fade = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 export default function Projects() {
@@ -20,25 +19,28 @@ export default function Projects() {
     activeTag === 'All' ? projects : projects.filter((p) => p.tags.includes(activeTag));
 
   return (
-    <div className="max-w-4xl mx-auto px-6 pt-10 pb-20 space-y-8">
-      <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Code className="text-indigo-400" />
-          <h1 className="text-3xl font-bold">Projects</h1>
-        </div>
-        <p className="text-slate-400 text-sm">これまでに取り組んだプロジェクト・制作物の一覧です。</p>
-      </motion.div>
+    <div className="mx-auto w-full max-w-6xl px-6 sm:px-10">
+      <motion.header
+        initial="hidden"
+        animate="visible"
+        variants={fade}
+        className="pt-16 sm:pt-24 pb-10"
+      >
+        <p className="text-xs font-semibold tracking-[0.18em] text-ink-2">SELECTED WORK — 2026</p>
+        <h1 className="mt-5 text-5xl sm:text-6xl font-bold tracking-tight">Projects</h1>
+        <p className="mt-5 max-w-xl font-jp leading-relaxed text-ink-2">
+          要件定義から実装・改善まで、手を動かして形にしてきた制作物です。タグで絞り込めます。
+        </p>
+      </motion.header>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-x-6 gap-y-2 pb-6">
         {tags.map((tag) => (
           <button
             key={tag}
             type="button"
             onClick={() => setActiveTag(tag)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-              activeTag === tag
-                ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/40'
-                : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
+            className={`text-sm font-medium transition-colors ${
+              activeTag === tag ? 'text-ink' : 'text-muted hover:text-ink-2'
             }`}
           >
             {tag}
@@ -46,22 +48,18 @@ export default function Projects() {
         ))}
       </div>
 
-      <motion.div layout className="grid md:grid-cols-2 gap-6">
+      <div className="pb-4">
         {filtered.map((project) => (
-          <motion.div
-            key={project.id}
-            layout
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ProjectCard project={project} />
-          </motion.div>
+          <ProjectRow key={project.id} project={project} />
         ))}
-        {filtered.length === 0 && (
-          <p className="text-slate-500 text-sm col-span-2">該当するプロジェクトはありません。</p>
+        {filtered.length > 0 ? (
+          <div className="border-t border-line" />
+        ) : (
+          <p className="border-t border-line py-12 text-sm text-ink-2">
+            該当するプロジェクトはありません。
+          </p>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }
